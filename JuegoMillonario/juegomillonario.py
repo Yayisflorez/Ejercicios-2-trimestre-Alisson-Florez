@@ -108,10 +108,14 @@ inicio = input(f"\n{nombre_jugador}, ¿estás listo/a para comenzar? (si/no): ")
 time.sleep(1)
 
 if inicio == "si":
-    print("\n ¡Comenzamos en! ")
-    for i in range(5, 0, -1):
-        print(i)
+    print("\n¡Comenzamos en!")
+
+    contador = 5
+    while contador > 0:
+        print(contador)
         time.sleep(1)
+        contador -= 1
+
     print("¡Empieza el juego!")
 
     nivel = 1
