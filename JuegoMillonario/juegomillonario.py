@@ -131,7 +131,7 @@ if inicio == "si":
                     time.sleep(1)
                 primera_vez = False
 
-            entrada = input('\nEscribe la respuesta correcta (a, b, c o d) o marca "m" para usar un comodín: ').lower()
+            entrada = input('\nEscribe la respuesta correcta o marca "m" para usar un comodín: ').lower()
 
             if entrada in ['a', 'b', 'c', 'd']:
                 if entrada == correcta:
@@ -145,68 +145,77 @@ if inicio == "si":
                     exit()
 
             elif entrada == "m":
-                if comodines_disponibles["1"] == False:
-                    if comodines_disponibles["2"] == False:
-                        if comodines_disponibles["3"] == False:
-                            print("Ya no tienes comodines disponibles.")
-                            continue
+                if comodines_disponibles["1"] == False and comodines_disponibles["2"] == False and comodines_disponibles["3"] == False:
+                    print("Ya no tienes comodines disponibles.")
+                    continue
 
-                print("\n -Comodines disponibles: \n")
-                if comodines_disponibles["1"]:
-                    print("1 - Llamar a un amigo, te dará una respuesta al azar\n")
-                if comodines_disponibles["2"]:
-                    print("2 - 50/50, dos incorrectas se van. Queda la buena y la mala.\n")
-                if comodines_disponibles["3"]:
-                    print("3 - Cambio de pregunta, te damos otra del mismo nivel.\n")
+                while True:
+                    print("\n -Comodines disponibles: \n")
+                    if comodines_disponibles["1"]:
+                        print("1 - Llamar a un amigo, te dará una respuesta al azar\n")
+                    if comodines_disponibles["2"]:
+                        print("2 - 50/50, dos incorrectas se van. Queda la buena y una mala.\n")
+                    if comodines_disponibles["3"]:
+                        print("3 - Cambio de pregunta, te damos otra del mismo nivel.\n")
 
-                eleccion = input("¿Qué comodín quieres usar? (1, 2 o 3): ")
-                if eleccion in comodines_disponibles and comodines_disponibles[eleccion]:
-                    comodines_disponibles[eleccion] = False
+                    eleccion = input("¿Qué comodín quieres usar? (1, 2, 3) o escribe 'cancelar' para volver: ").lower()
 
-                    if eleccion == "1":
-                        print("Llamando a un amigo...")
-                        time.sleep(2)
-                        sugerencia = random.choice(['a', 'b', 'c', 'd'])
-                        print(f"Tu amigo dice que cree que la respuesta es: '{sugerencia}'")
-                        comodin_usado1 = True
-                        time.sleep(1)
+                    if eleccion == "cancelar":
+                        print("Volviendo a la pregunta sin usar comodines.")
+                        break
 
-                    elif eleccion == "2":
-                        print("Se eliminan dos respuestas incorrectas")
-                        letras = ['a', 'b', 'c', 'd']
-                        opciones_incorrectas = []
-                        for letra in letras:
-                            if letra != correcta:
-                                opciones_incorrectas.append(letra)
+                    if eleccion in comodines_disponibles and comodines_disponibles[eleccion]:
+                        comodines_disponibles[eleccion] = False
 
-                        eliminadas = random.sample(opciones_incorrectas, 2)
-                        opciones_actuales = [ ]
-                        for op in pregunta['opciones']:
-                                if op[0] == correcta:
-                                    opciones_actuales.append(op)
-                                elif op[0] not in eliminadas:
-                                    opciones_actuales.append(op)
-
-                        print("\n Opciones después del 50/50:")
-                        time.sleep(1)
-                        for op in opciones_actuales:
-                            print(op)
+                        if eleccion == "1":
+                            print("Llamando a un amigo...")
+                            time.sleep(2)
+                            letras_visibles = []
+                            for opcion in opciones_actuales:
+                                letras_visibles.append(opcion[0])
+                            sugerencia = random.choice(letras_visibles)
+                            print(f"Tu amigo dice que cree que la respuesta es: '{sugerencia}'")
                             time.sleep(1)
-                        
-                    elif eleccion == "3":
-                        print("\n Nueva pregunta:")
-                        nueva = pregunta
-                        while nueva == pregunta:
-                         nueva = preguntas[nivel][1]
-                        pregunta = nueva
-                        correcta = pregunta['respuesta']
-                        opciones_actuales = pregunta['opciones']
-                        primera_vez = True
-                    
-                else:
-                    print("Comodín no disponible o ya usado.")
+                            break
+
+                        elif eleccion == "2":
+                            print("Se eliminan dos respuestas incorrectas")
+                            letras = ['a', 'b', 'c', 'd']
+                            opciones_incorrectas = []
+                            for letra in letras:
+                                if letra != correcta:
+                                    opciones_incorrectas.append(letra)
+
+                            eliminadas = random.sample(opciones_incorrectas, 2)
+
+                            opciones_actuales = []
+                            for opcion in pregunta['opciones']:
+                                letra = opcion[0]
+                                if letra == correcta or letra not in eliminadas:
+                                    opciones_actuales.append(opcion)
+
+                            print("\nOpciones después del 50/50:")
+                            time.sleep(1)
+                            for op in opciones_actuales:
+                                print(op)
+                                time.sleep(1)
+                            break
+
+                        elif eleccion == "3":
+                            print("\nNueva pregunta:")
+                            nueva = pregunta
+                            while nueva == pregunta:
+                                nueva = preguntas[nivel][1]
+                            pregunta = nueva
+                            correcta = pregunta['respuesta']
+                            opciones_actuales = pregunta['opciones']
+                            primera_vez = True
+                            break
+                    else:
+                        print("Comodín no disponible o ya usado.")
+
             else:
-                print("¡Error!...Escribe a, b, c, d o m para comodín.")
+                print("¡Error!...Escribe una opcion valida o m para comodín.")
 
         nivel += 1
 
