@@ -3,8 +3,6 @@ import time
 
 dinero = 0
 recompensa_por_pregunta = 500000
-
-
 comodines_disponibles = {
     "1": True,
     "2": True,
@@ -95,7 +93,6 @@ preguntas = {
     ]
 }
 
-
 print("\n" + "="*60)
 print("¡Bienvenido/a al juego: ¿Quién quiere ser millonario?! 🧠💰")
 print("="*60 + "\n")
@@ -145,8 +142,6 @@ if inicio == "si":
                 else:
                     print(f"\nIncorrecto. La respuesta correcta era '{correcta}'.")
                     print("Perdiste todo tu dinero.")
-                    dinero = 0
-                    print(f"Ganaste un total de: ${dinero}")
                     exit()
 
             elif entrada == "m":
@@ -185,29 +180,29 @@ if inicio == "si":
                                 opciones_incorrectas.append(letra)
 
                         eliminadas = random.sample(opciones_incorrectas, 2)
-                        opciones_actuales = [
-                            op for op in pregunta['opciones']
-                            if op[0] == correcta or op[0] not in eliminadas
-                        ]
+                        opciones_actuales = [ ]
+                        for op in pregunta['opciones']:
+                                if op[0] == correcta:
+                                    opciones_actuales.append(op)
+                                elif op[0] not in eliminadas:
+                                    opciones_actuales.append(op)
+
                         print("\n Opciones después del 50/50:")
                         time.sleep(1)
                         for op in opciones_actuales:
                             print(op)
                             time.sleep(1)
-                        comodin_usado2 = True
-
+                        
                     elif eleccion == "3":
                         print("\n Nueva pregunta:")
                         nueva = pregunta
                         while nueva == pregunta:
-                            nueva = random.choice(preguntas[nivel])
+                         nueva = preguntas[nivel][1]
                         pregunta = nueva
                         correcta = pregunta['respuesta']
                         opciones_actuales = pregunta['opciones']
                         primera_vez = True
-                        
-                        
-
+                    
                 else:
                     print("Comodín no disponible o ya usado.")
             else:
